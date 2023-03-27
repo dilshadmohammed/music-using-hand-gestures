@@ -71,7 +71,6 @@ while True:
 
         # print(fingers)
         totalFingers = fingers.count(1)
-        print(totalFingers)
 
         # check if hand is in right or left side of the screen
         # If hand is in left sitar else piano
@@ -93,7 +92,7 @@ while True:
     currentTime = time.time()
     fps = 1 / (currentTime - previousTime)
     previousTime = currentTime
-    
+
     cv2.putText(img, f'FPS: {int(fps)}', (wCam - 77, 23), cv2.FONT_HERSHEY_PLAIN, 1, (156, 2, 245), 1)
     cv2.imshow("Image", img)
 
