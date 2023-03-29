@@ -44,27 +44,92 @@ while True:
     img = cv2.flip(img, 1)
 
     img = detector.findHands(img)
-    lmList = detector.findPosition(img, draw=False)
+    lmList_left = detector.findPosition(img, draw=False, handNo=0)
+    lmList_right = detector.findPosition(img, draw=False, handNo=-1)
+    if lmList_right == lmList_left:
+        lmListCommon = lmList_right
 
-    if len(lmList) != 0:
+    if len(lmList_left) != 0 and lmList_left != lmList_right:
         fingers = []
         # Checking left or right hand
-        if lmList[1][1] < lmList[0][1]:
+        if lmList_left[1][1] < lmList_left[0][1]:
             # Thumb
-            if lmList[tipIds[0]][1] < lmList[tipIds[0] - 1][1]:
+            if lmList_left[tipIds[0]][1] < lmList_left[tipIds[0] - 1][1]:
                 fingers.append(1)
             else:
                 fingers.append(0)
         else:
             # Thumb
-            if lmList[tipIds[0]][1] > lmList[tipIds[0] - 1][1]:
+            if lmList_left[tipIds[0]][1] > lmList_left[tipIds[0] - 1][1]:
                 fingers.append(1)
             else:
                 fingers.append(0)
 
         # 4 Fingers
         for id in range(1, 5):
-            if lmList[tipIds[id]][2] < lmList[tipIds[id] - 2][2]:
+            if lmList_left[tipIds[id]][2] < lmList_left[tipIds[id] - 2][2]:
+                fingers.append(1)
+            else:
+                fingers.append(0)
+
+        # print(fingers)
+        totalFingers = fingers.count(1)
+
+        sounds[totalFingers - 1].play()
+        time.sleep(0.1)
+
+        cv2.rectangle(img, (10, hCam - 117), (85, hCam - 17), (13, 221, 224), cv2.FILLED)
+        cv2.putText(img, str(totalFingers), (23, hCam - 42), cv2.FONT_HERSHEY_PLAIN, 5, (235, 189, 23), 12)
+
+    if len(lmList_right) != 0 and lmList_left != lmList_right:
+        fingers = []
+        # Checking left or right hand
+        if lmList_right[1][1] < lmList_right[0][1]:
+            # Thumb
+            if lmList_right[tipIds[0]][1] < lmList_right[tipIds[0] - 1][1]:
+                fingers.append(1)
+            else:
+                fingers.append(0)
+        else:
+            # Thumb
+            if lmList_right[tipIds[0]][1] > lmList_right[tipIds[0] - 1][1]:
+                fingers.append(1)
+            else:
+                fingers.append(0)
+
+        # 4 Fingers
+        for id in range(1, 5):
+            if lmList_right[tipIds[id]][2] < lmList_right[tipIds[id] - 2][2]:
+                fingers.append(1)
+            else:
+                fingers.append(0)
+
+        # print(fingers)
+        totalFingers = fingers.count(1)
+        sounds1[totalFingers - 1].play()
+        time.sleep(0.1)
+
+        cv2.rectangle(img, (1185, hCam - 117), (1270, hCam - 17), (13, 221, 224), cv2.FILLED)
+        cv2.putText(img, str(totalFingers), (1198, hCam - 42), cv2.FONT_HERSHEY_PLAIN, 5, (235, 189, 23), 12)
+    if len(lmListCommon) != 0:
+        fingers = []
+        # Checking left or right hand
+        if lmListCommon[1][1] < lmListCommon[0][1]:
+            # Thumb
+            if lmListCommon[tipIds[0]][1] < lmListCommon[tipIds[0] - 1][1]:
+                fingers.append(1)
+            else:
+                fingers.append(0)
+        else:
+            # Thumb
+            if lmListCommon[tipIds[0]][1] > lmListCommon[tipIds[0] - 1][1]:
+                fingers.append(1)
+            else:
+                fingers.append(0)
+
+        # 4 Fingers
+        for id in range(1, 5):
+            if lmListCommon[tipIds[id]][2] < lmListCommon[tipIds[id] - 2][2]:
                 fingers.append(1)
             else:
                 fingers.append(0)
@@ -74,7 +139,7 @@ while True:
 
         # check if hand is in right or left side of the screen
         # If hand is in left sitar else piano
-        if lmList[0][1] < 640:
+        if lmListCommon[0][1] < 640:
             sounds[totalFingers - 1].play()
             time.sleep(0.15)
 
