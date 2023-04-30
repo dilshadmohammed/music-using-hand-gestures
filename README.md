@@ -29,7 +29,3 @@ GestureTunes uses the following libraries:
 ## Contributing
 
 Contributions are always welcome! If you have any suggestions or find any bugs, please create a new issue or submit a pull request.
-
-## License
-
-This project is licensed under the MIT License. See the `LICENSE` file for more information.
